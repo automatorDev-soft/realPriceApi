@@ -1,5 +1,5 @@
 # Price Comparison App
-
+🛑🛑 in order to import cheero or any used library you have to use impor "" from ... instead of require 🛑🛑
 ## Introduction
 
 Welcome to the Price Comparison App! This application helps users find the best prices for products they want to buy online by comparing prices from various online stores like Amazon, Jumia, and others. This project is developed using Node.js and is designed for collaborative team development.
