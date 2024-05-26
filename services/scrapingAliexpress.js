@@ -9,12 +9,15 @@ const fetchProductDetails = async (url, productData) => {
   const response = await axios.get(url);
   const html = response.data;
   const $ = cheerio.load(html);
-  const productDescription = $(".description--wrap--KtulZR5").text();
-  console.log('url : ' + productDescription)
+  const regex = /[\n\*-\s+]/g;
+  const productDescription = $("#root").text();
+  const cleanedProductDescription = productDescription
+    .replace(regex, " ")
+    .trim();
   const detailedProductData = {
     ...productData,
     details: {
-      productDescription: productDescription,
+      productDescription: cleanedProductDescription,
       comments: [],
     },
   };
@@ -27,7 +30,9 @@ const fetchProductDetails = async (url, productData) => {
   const $ = cheerio.load(html);
 
   // Create an array of promises for fetching product details
-  const fetchDetailsPromises = $("a.multi--container--1UZxxHY.cards--card--3PJxwBm.search-card-item")
+  const fetchDetailsPromises = $(
+    "a.multi--container--1UZxxHY.cards--card--3PJxwBm.search-card-item"
+  )
     .map(async function () {
       let productUrl = $(this).attr("href");
       if (!productUrl.startsWith("http")) {
@@ -60,7 +65,6 @@ const fetchProductDetails = async (url, productData) => {
         source: "aliexpress",
         productOriginUrl: productUrl,
       };
-      console.log(productData);
       return fetchProductDetails(productUrl, productData);
     })
     .get();
@@ -69,4 +73,5 @@ const fetchProductDetails = async (url, productData) => {
   await Promise.all(fetchDetailsPromises);
 
   console.log(data);
+  console.log(data.length);
 })();
