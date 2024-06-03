@@ -23,12 +23,10 @@ const fetchProductDetails = async (url, productData) => {
   };
   data.push(detailedProductData);
 };
-
-(async () => {
-  const response = await axios.get(url);
+const handelEachProductPageFetching = async (pageUrl) => {
+  const response = await axios.get(pageUrl);
   const html = response.data;
   const $ = cheerio.load(html);
-
   // Create an array of promises for fetching product details
   const fetchDetailsPromises = $(
     "a.multi--container--1UZxxHY.cards--card--3PJxwBm.search-card-item"
@@ -71,7 +69,22 @@ const fetchProductDetails = async (url, productData) => {
 
   // Wait for all promises to resolve
   await Promise.all(fetchDetailsPromises);
+};
 
-  console.log(data);
-  console.log(data.length);
-})();
+const fetchProducts = async () => {
+  (async () => {
+    const response = await axios.get(url);
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    const eighthChild = $(".comet-pagination").children().eq(7).text();
+    const validatePagination = !eighthChild ? 1 : Number(eighthChild);
+    for (let i = 0; i < validatePagination; i++) {
+      await handelEachProductPageFetching(`${url}?page=${i + 1}`);
+    }
+
+    console.log(data);
+    console.log(data.length);
+  })();
+};
+fetchProducts();
