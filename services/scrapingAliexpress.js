@@ -1,11 +1,9 @@
 import axios from "axios";
 import cheerio from "cheerio";
 
-const searchedProduct = "headphones";
-const url = `https://www.aliexpress.com/w/wholesale-${searchedProduct}.html`;
-const data = [];
+const products = [];
 
-const fetchProductDetails = async (url, productData) => {
+const fetchAliexpressProductDetails = async (url, productData) => {
   const response = await axios.get(url);
   const html = response.data;
   const $ = cheerio.load(html);
@@ -21,10 +19,11 @@ const fetchProductDetails = async (url, productData) => {
       comments: [],
     },
   };
-  data.push(detailedProductData);
+  products.push(detailedProductData);
 };
 
-(async () => {
+export const scrapingAlexpriss = async (searchedProduct) => {
+  const url = `https://www.aliexpress.com/w/wholesale-${searchedProduct}.html`;
   const response = await axios.get(url);
   const html = response.data;
   const $ = cheerio.load(html);
@@ -65,13 +64,15 @@ const fetchProductDetails = async (url, productData) => {
         source: "aliexpress",
         productOriginUrl: productUrl,
       };
-      return fetchProductDetails(productUrl, productData);
+      return fetchAliexpressProductDetails(productUrl, productData);
     })
     .get();
 
   // Wait for all promises to resolve
   await Promise.all(fetchDetailsPromises);
 
-  console.log(data);
-  console.log(data.length);
-})();
+  console.log(products);
+  console.log(products.length);
+};
+
+scrapingAlexpriss("headphones");
