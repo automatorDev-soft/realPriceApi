@@ -1,9 +1,11 @@
 import axios from "axios";
 import cheerio from "cheerio";
 
-const products = [];
+const searchedProduct = "headphones";
+const url = `https://www.aliexpress.com/w/wholesale-${searchedProduct}.html`;
+const data = [];
 
-const fetchAliexpressProductDetails = async (url, productData) => {
+const fetchProductDetails = async (url, productData) => {
   const response = await axios.get(url);
   const html = response.data;
   const $ = cheerio.load(html);
@@ -19,7 +21,7 @@ const fetchAliexpressProductDetails = async (url, productData) => {
       comments: [],
     },
   };
-  products.push(detailedProductData);
+  data.push(detailedProductData);
 };
 const handelEachProductPageFetching = async (pageUrl) => {
   const response = await axios.get(pageUrl);
@@ -61,7 +63,7 @@ const handelEachProductPageFetching = async (pageUrl) => {
         source: "aliexpress",
         productOriginUrl: productUrl,
       };
-      return fetchAliexpressProductDetails(productUrl, productData);
+      return fetchProductDetails(productUrl, productData);
     })
     .get();
 

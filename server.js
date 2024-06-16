@@ -22,7 +22,6 @@ app.use(cors(corsOptions)); // Enable CORS with specified options
 
 app.use(bodyParser.json()); // Add body-parser middleware
 app.use("/api", router); // Mount the API router
-
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
 });

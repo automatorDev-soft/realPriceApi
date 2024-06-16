@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
+import { products } from "../data/products.js";
 
-const products = [];
 export const fetchDecathlonData = async (product) => {
   // Launch the browser
   const browser = await puppeteer.launch({ headless: false });
@@ -57,4 +57,4 @@ export const fetchDecathlonData = async (product) => {
   }
 };
 
-fetchDecathlonData("trottinette");
+// fetchDecathlonData("trottinette");
