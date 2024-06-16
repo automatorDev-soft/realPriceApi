@@ -1,8 +1,7 @@
 import puppeteer from "puppeteer";
 import cheerio from "cheerio";
 import fetch from "node-fetch";
-
-const products = [];
+import { products } from "../data/products.js";
 
 export const fetchAvitoProductDetails = async (url, productData) => {
   const response = await fetch(url);
@@ -65,8 +64,8 @@ export const fetchingAvito = async (searchedProduct) => {
   // Wait for all promises to resolve
   await Promise.all(fetchDetailsPromises);
 
-  console.log(products);
+  // console.log(products);
   await browser.close();
 };
 
-fetchingAvito("chaire");
+//fetchingAvito("chaire");

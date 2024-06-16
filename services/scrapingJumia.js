@@ -1,7 +1,6 @@
 import puppeteer from "puppeteer";
 import cheerio from "cheerio";
-
-const products = [];
+import { products } from "../data/products.js";
 
 export const fetchingJumia = async (searchedProduct) => {
   const url = `https://www.jumia.ma/catalog/?q=${searchedProduct}`;
@@ -35,10 +34,10 @@ export const fetchingJumia = async (searchedProduct) => {
     return products.push(productData);
   });
 
-  console.log(products);
-  console.log("length of products : " + products.length);
+  //console.log(products);
+  //console.log("length of products : " + products.length);
 
   await browser.close();
 };
 
-fetchingJumia("tondouse");
+//fetchingJumia("tondouse");
