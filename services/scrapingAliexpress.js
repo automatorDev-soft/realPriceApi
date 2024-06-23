@@ -1,9 +1,6 @@
 import axios from "axios";
 import cheerio from "cheerio";
-
-const searchedProduct = "headphones";
-const url = `https://www.aliexpress.com/w/wholesale-${searchedProduct}.html`;
-const data = [];
+import { products } from "../data/products.js";
 
 const fetchProductDetails = async (url, productData) => {
   const response = await axios.get(url);
@@ -21,7 +18,7 @@ const fetchProductDetails = async (url, productData) => {
       comments: [],
     },
   };
-  data.push(detailedProductData);
+  products.push(detailedProductData);
 };
 const handelEachProductPageFetching = async (pageUrl) => {
   const response = await axios.get(pageUrl);
@@ -71,20 +68,20 @@ const handelEachProductPageFetching = async (pageUrl) => {
   await Promise.all(fetchDetailsPromises);
 };
 
-const fetchProducts = async () => {
-  (async () => {
-    const response = await axios.get(url);
-    const html = response.data;
-    const $ = cheerio.load(html);
+export const fetchAliexpressProducts = async (searchedProduct) => {
+  const url = `https://www.aliexpress.com/w/wholesale-${searchedProduct}.html`;
+  const response = await axios.get(url);
+  const html = response.data;
+  const $ = cheerio.load(html);
 
-    const eighthChild = $(".comet-pagination").children().eq(7).text();
-    const validatePagination = !eighthChild ? 1 : Number(eighthChild);
-    for (let i = 0; i < validatePagination; i++) {
-      await handelEachProductPageFetching(`${url}?page=${i + 1}`);
-    }
+  const eighthChild = $(".comet-pagination").children().eq(7).text();
+  const validatePagination = !eighthChild ? 1 : Number(eighthChild);
+  for (let i = 0; i < validatePagination; i++) {
+    await handelEachProductPageFetching(`${url}?page=${i + 1}`);
+  }
 
-    console.log(data);
-    console.log(data.length);
-  })();
+  //  console.log(products);
+  //  console.log(products.length);
 };
-fetchProducts();
+
+//fetchmAliexpressProducts("headphones");
